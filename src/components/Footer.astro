@@ -1,0 +1,23 @@
+---
+const year = new Date().getFullYear();
+const links: { href: string; label: string }[] = [
+  { href: "https://github.com/bavellone", label: "GitHub" },
+  { href: "https://www.linkedin.com/in/ben-avellone-858481219/", label: "LinkedIn" },
+  { href: "mailto:ben@codescalar.com", label: "Email" },
+];
+---
+
+<footer class="container-page mt-[var(--space-section)] flex flex-col gap-4 border-t border-[var(--color-rule)] py-10 text-[var(--text-meta)] text-[var(--color-ink-soft)] sm:flex-row sm:items-center sm:justify-between">
+  <p>&copy; {year} Ben Avellone</p>
+  <ul class="flex gap-5">
+    {
+      links.map(({ href, label }) => (
+        <li>
+          <a href={href} class="text-[var(--color-ink-soft)] no-underline hover:text-[var(--color-ink)]">
+            {label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</footer>

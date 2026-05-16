@@ -1,0 +1,45 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+  src?: ImageMetadata;
+  alt?: string;
+  caption?: string;
+  /**
+   * Optional explicit width/sizing hint. Defaults to the natural image width
+   * up to the content column.
+   */
+  widths?: number[];
+  sizes?: string;
+}
+
+const { src, alt, caption, widths, sizes } = Astro.props;
+---
+
+<figure class="my-8">
+  <div class="overflow-hidden rounded-xl bg-[color-mix(in_oklab,var(--color-ink)_4%,transparent)]">
+    {
+      src ? (
+        <Image
+          src={src}
+          alt={alt ?? ""}
+          widths={widths ?? [480, 768, 1024]}
+          sizes={sizes ?? "(min-width: 768px) 700px, 100vw"}
+          class="block h-auto w-full"
+          loading="lazy"
+          decoding="async"
+        />
+      ) : (
+        <slot />
+      )
+    }
+  </div>
+  {
+    caption && (
+      <figcaption class="mt-3 text-[var(--text-meta)] text-[var(--color-ink-faint)]">
+        {caption}
+      </figcaption>
+    )
+  }
+</figure>

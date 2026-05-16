@@ -1,0 +1,131 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import StackChips from "~/components/StackChips.astro";
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  entry: CollectionEntry<"caseStudies">;
+}
+
+const { entry } = Astro.props;
+const {
+  title,
+  oneline,
+  role,
+  client,
+  dates,
+  stack,
+  liveUrl,
+  companyUrl,
+  heroTreatment,
+  heroImage,
+  heroAlt,
+} = entry.data;
+---
+
+<BaseLayout title={title} description={oneline}>
+  <article class="container-page">
+    <header class="mt-8 mb-[var(--space-section)]">
+      {
+        heroTreatment === "image" && heroImage ? (
+          <div class="aspect-[16/9] w-full overflow-hidden rounded-xl bg-[color-mix(in_oklab,var(--color-ink)_4%,transparent)]">
+            {heroImage.format === "svg" ? (
+              <Image
+                src={heroImage}
+                alt={heroAlt ?? ""}
+                class="h-full w-full object-contain"
+                loading="eager"
+                fetchpriority="high"
+              />
+            ) : (
+              <Image
+                src={heroImage}
+                alt={heroAlt ?? ""}
+                widths={[640, 960, 1280, 1600]}
+                sizes="(min-width: 1024px) 1100px, 100vw"
+                class="h-full w-full object-cover"
+                loading="eager"
+                fetchpriority="high"
+              />
+            )}
+          </div>
+        ) : (
+          <div class="aspect-[16/9] w-full overflow-hidden rounded-xl bg-[color-mix(in_oklab,var(--color-ink)_4%,transparent)]">
+            <div class="flex h-full w-full items-end p-8 sm:p-12">
+              <h1 class="text-[var(--text-display)] font-semibold tracking-tight leading-[var(--leading-tight)]">
+                {title}
+              </h1>
+            </div>
+          </div>
+        )
+      }
+      <div class="mt-10 grid gap-6 sm:grid-cols-[1fr_auto] sm:items-end">
+        <div>
+          {
+            heroTreatment === "image" && (
+              <h1 class="text-[var(--text-h1)] font-semibold tracking-tight">{title}</h1>
+            )
+          }
+          <p class="mt-3 max-w-prose text-[var(--text-lead)] text-[var(--color-ink-soft)]">{oneline}</p>
+        </div>
+        <dl class="grid grid-cols-2 gap-x-8 gap-y-2 text-[var(--text-meta)] sm:grid-cols-1 sm:text-right">
+          <dt class="text-[var(--color-ink-faint)]">Role</dt>
+          <dd class="text-[var(--color-ink-soft)]">{role}</dd>
+          {
+            client && (
+              <>
+                <dt class="text-[var(--color-ink-faint)]">Client</dt>
+                <dd class="text-[var(--color-ink-soft)]">{client}</dd>
+              </>
+            )
+          }
+          <dt class="text-[var(--color-ink-faint)]">Dates</dt>
+          <dd class="text-[var(--color-ink-soft)]">{dates}</dd>
+          {
+            companyUrl && (
+              <>
+                <dt class="text-[var(--color-ink-faint)]">Company</dt>
+                <dd class="break-all">
+                  <a href={companyUrl}>{companyUrl.replace(/^https?:\/\//, "").replace(/\/$/, "")}</a>
+                </dd>
+              </>
+            )
+          }
+          {
+            liveUrl && (
+              <>
+                <dt class="text-[var(--color-ink-faint)]">Live</dt>
+                <dd class="break-all">
+                  <a href={liveUrl}>{liveUrl.replace(/^https?:\/\//, "").replace(/\/$/, "")}</a>
+                </dd>
+              </>
+            )
+          }
+        </dl>
+      </div>
+    </header>
+
+    <div class="prose-body measure mx-auto">
+      <slot />
+    </div>
+
+    <section class="measure mx-auto mt-[var(--space-section)]">
+      <h2 class="text-[var(--text-h3)] font-medium">Stack</h2>
+      <StackChips items={stack} class="mt-4" />
+    </section>
+
+    <p class="container-page mt-[var(--space-section)] text-[var(--text-meta)]">
+      <a href="/case-studies" class="link-grow inline-block text-[var(--color-accent)] no-underline">&larr; All case studies</a>
+    </p>
+  </article>
+</BaseLayout>
+
+<style is:global>
+  .prose-body p { margin-block: 1.1em; }
+  .prose-body h2 { margin-block: 2em 0.6em; font-size: var(--text-h2); }
+  .prose-body h3 { margin-block: 1.6em 0.4em; }
+  .prose-body ul, .prose-body ol { margin-block: 1em; padding-left: 1.25rem; }
+  .prose-body li { margin-block: 0.35em; }
+  .prose-body code { font-family: ui-monospace, monospace; font-size: 0.9em; padding: 0.15em 0.35em; background: color-mix(in oklab, var(--color-ink) 6%, transparent); border-radius: 3px; }
+</style>

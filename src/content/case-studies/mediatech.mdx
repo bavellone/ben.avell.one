@@ -1,0 +1,95 @@
+---
+title: MediaTech Direct Fulfillment Portal
+oneline: An e-commerce fulfillment platform that lets customers upload media, our pipeline transcodes it, and a fulfillment team ships personalized videobook devices.
+role: Architect & sole engineer
+client: MediaTech Direct
+dates: April 2023 – January 2026
+stack:
+  - TypeScript
+  - React
+  - Next.js
+  - Node.js
+  - EdgeDB
+  - PostgreSQL
+  - Kubernetes
+  - OAuth2
+  - BigCommerce
+  - Stripe
+  - Twilio
+  - Slack
+  - FFMPEG
+  - GCP
+  - Terraform
+liveUrl: https://portal.mediatechdirect.com
+companyUrl: https://mediatechdirect.com
+heroTreatment: image
+heroImage: ../../assets/case-studies/mediatech/hero-videobook-dyson.webp
+heroAlt: "An open MediaTech videobook for the Dyson Supersonic: a hardcover with an embedded screen playing a product video, shown beside its printed insert and a second closed copy."
+order: 1
+draft: false
+---
+
+import Figure from "~/components/Figure.astro";
+import Gallery from "~/components/Gallery.astro";
+import LiteYouTube from "~/components/LiteYouTube.astro";
+import papalImg from "~/assets/case-studies/mediatech/videobook-papal-foundation.webp";
+import qrWhatImg from "~/assets/case-studies/mediatech/qrblooms-what.jpg";
+import qrWhyImg from "~/assets/case-studies/mediatech/qrblooms-why.jpg";
+
+## About MediaTech Direct
+
+MediaTech Direct makes personalized video gifts called videobooks: a hardcover book with a built-in screen that plays a video when opened. Brands and foundations use them as high-touch outreach. The book ships with the recipient's video already loaded on the device.
+
+Every order is bespoke. Customers upload media; the company transcodes it, loads the hardware, and ships the finished product. The portal I built is what runs that flow end to end.
+
+<Gallery ariaLabel="MediaTech Direct: company overview and product photo">
+  <LiteYouTube id="7mNIVPI1BLA" title="What MediaTech Direct does: a company overview" />
+
+  <Figure
+    src={papalImg}
+    alt="A videobook produced for the Papal Foundation: a hardcover with an embedded 7-inch IPS screen on the inside cover."
+    caption="A Papal Foundation videobook, one of the bespoke devices the portal ships."
+  />
+</Gallery>
+
+## Problem
+
+A personalized-gifting company needed customers to upload videos and photos, have those files automatically transcoded for their embedded videobook devices, and have a fulfillment team preload the media onto the hardware before shipping. Multiple customers uploading large media files at once made the app unresponsive. A single corrupted file could break the whole pipeline. The fulfillment team needed optimized media onto USB-connected devices without manual file-shuffling.
+
+## Approach
+
+Uploads stream directly from the browser to an inbound cloud bucket. The app stays responsive under load because nothing buffers through the application servers. Transcoded output lives in a public bucket keyed by UUID, with metadata in the database.
+
+A job-processing system uses the database as the broker. Each upload becomes a job. A corrupted file fails one job, not the queue. Workers process independently and scale separately from the web tier.
+
+Web, database, and media-optimization servers each scale horizontally on their own. The frontend ships role-specific bundles for customers, the fulfillment team, and management.
+
+On the fulfillment side, a technician plugs a videobook into a USB port and the browser writes optimized media directly to it via the File System API. No intermediate downloads, no manual file handling.
+
+Integrations: BigCommerce for orders, Stripe for payments, Slack for ops notifications, Twilio for SMS. EdgeDB carries customer data and file metadata; the typed query builder paid back its cost as the schema grew.
+
+## Outcome
+
+An all-in-one platform used by customers, fulfillment staff, and management with role-specific views and permissions. In continuous production from April 2023 through January 2026, with the streaming uploads and the USB-write workflow proving out under real customer load.
+
+## QRBlooms
+
+[QRBlooms](https://mediatechdirect.com/qr-blooms/) is the second product running on the same pipeline: personalized QR codes that resolve to custom video pages, orderable in bulk.
+
+The transcoding pipeline, the database-as-job-broker, the UUID-keyed media bucket, the role-bundled frontends: none of it had to change. QRBlooms plugged into the same flow and added its own product surface on top. The architectural choices that kept MediaTech responsive under concurrent uploads are what let a second product ship as a feature rollout instead of a rewrite.
+
+<Gallery ariaLabel="QRBlooms: product overview video and product cards">
+  <LiteYouTube id="Az43GVYruGQ" title="QRBlooms: a product overview" />
+
+  <Figure
+    src={qrWhatImg}
+    alt="A QRBlooms product card explaining how each personalized QR code resolves to a custom video page."
+    caption="What QRBlooms is: each personalized QR code resolves to a custom video page."
+  />
+
+  <Figure
+    src={qrWhyImg}
+    alt="A QRBlooms product card highlighting the platform's differentiators."
+    caption="What sets QRBlooms apart from generic QR generators."
+  />
+</Gallery>

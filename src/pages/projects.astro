@@ -1,0 +1,73 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import StackChips from "~/components/StackChips.astro";
+import ZoomImage from "~/components/ZoomImage.astro";
+import { projects } from "~/data/projects";
+
+const slug = (s: string) =>
+  s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+---
+
+<BaseLayout
+  title="Projects"
+  description="Smaller engagements, sunset products, and infrastructure work Ben Avellone has shipped."
+>
+  <section class="container-page mt-12 sm:mt-20">
+    <h1 class="text-[var(--text-h1)] font-semibold tracking-tight">Projects</h1>
+    <p class="mt-4 max-w-prose text-[var(--text-lead)] text-[var(--color-ink-soft)]">
+      Smaller engagements, sunset products, and infrastructure work I built but don't write long
+      case studies for.
+    </p>
+  </section>
+  <section class="container-page mt-[var(--space-section)]">
+    <ul class="divide-y divide-[var(--color-rule)]">
+      {
+        projects.map((project) => (
+          <li class="py-10 first:pt-0">
+            <div class="grid gap-2 sm:grid-cols-[1fr_auto] sm:items-baseline">
+              <h2 class="text-[var(--text-h3)] font-medium">
+                {project.url ? <a href={project.url}>{project.name}</a> : project.name}
+              </h2>
+              <p class="text-[var(--text-meta)] text-[var(--color-ink-soft)]">
+                {project.dates} &middot; {project.status}
+              </p>
+            </div>
+            <p class="mt-3 max-w-prose text-[var(--color-ink-soft)]">{project.blurb}</p>
+            <StackChips items={project.stack} class="mt-4" />
+            {project.images && project.images.length > 0 && (
+              <div class="mt-5 flex flex-wrap gap-4">
+                {project.images.map((img, i) => (
+                  <div class="w-full max-w-[520px]">
+                    <ZoomImage
+                      image={img.src}
+                      alt={img.alt}
+                      id={`pi-${slug(project.name)}-${i}`}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+            {project.files && project.files.length > 0 && (
+              <p class="mt-4 text-[var(--text-meta)]">
+                {project.files.map((file, i) => (
+                  <>
+                    {i > 0 && <span class="text-[var(--color-ink-faint)]"> &middot; </span>}
+                    <a
+                      href={file.href}
+                      class="link-grow inline-block text-[var(--color-accent)] no-underline"
+                    >
+                      {file.label} &rarr;
+                    </a>
+                  </>
+                ))}
+              </p>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>

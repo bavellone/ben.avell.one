@@ -1,0 +1,24 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import CaseStudyCard from "~/components/CaseStudyCard.astro";
+
+const studies = (await getCollection("caseStudies", ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<BaseLayout
+  title="Case Studies"
+  description="A handful of projects Ben Avellone has owned end-to-end."
+>
+  <section class="container-page mt-12 sm:mt-20">
+    <h1 class="text-[var(--text-h1)] font-semibold tracking-tight">Case Studies</h1>
+    <p class="mt-4 max-w-prose text-[var(--text-lead)] text-[var(--color-ink-soft)]">
+      A handful of projects I've owned end-to-end.
+    </p>
+  </section>
+  <section class="container-page mt-[var(--space-section)] grid gap-16 sm:grid-cols-2">
+    {studies.map((entry) => <CaseStudyCard entry={entry} />)}
+  </section>
+</BaseLayout>

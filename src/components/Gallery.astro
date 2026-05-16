@@ -1,0 +1,307 @@
+---
+interface Props {
+  ariaLabel: string;
+  class?: string;
+}
+const { ariaLabel, class: className } = Astro.props;
+---
+
+<div class:list={["gallery", className]} aria-label={ariaLabel}>
+  <div class="gallery__viewport" tabindex="0" aria-roledescription="gallery">
+    <slot />
+  </div>
+  <div class="gallery__bar">
+    <p class="gallery__caption" aria-live="polite" aria-atomic="true"></p>
+    <div class="gallery__controls">
+      <button class="gallery__btn" type="button" data-dir="-1" aria-label="Previous slide">
+        Prev
+      </button>
+      <button class="gallery__btn" type="button" data-dir="1" aria-label="Next slide">
+        Next
+      </button>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  .gallery {
+    position: relative;
+    margin-block: 2rem;
+  }
+
+  /* Viewport: horizontal scroll-snap track. Each child = one slide,
+     full viewport width, 16:9. */
+  .gallery__viewport {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 100%;
+    gap: 1rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    border-radius: 0.75rem;
+  }
+  .gallery__viewport::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* astro-embed-youtube emits a one-time custom-element-definition
+     script element next to the first lite-youtube instance on the page,
+     which lands inside our slot wrapper. Hide non-visual children so
+     they don't render as blank slides or get counted by the JS.
+     NOTE: never write a literal angle-bracket HTML tag (e.g. an opening
+     script tag) anywhere in this style block. Vite's comment-unaware
+     optimizeDeps scanner matches it as a real script element and
+     crashes the cold-cache dependency scan. */
+  .gallery__viewport > script,
+  .gallery__viewport > style,
+  .gallery__viewport > template {
+    display: none !important;
+  }
+
+  /* Base slide rule: every direct child gets a fixed 16:9 frame with a
+     soft neutral bg so any letterbox gap reads as intentional. Use
+     background-color (not the `background:` shorthand) so we don't
+     clobber lite-youtube's inline thumbnail background-image and the
+     package's background-size/position defaults. */
+  .gallery__viewport > * {
+    scroll-snap-align: start;
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    margin: 0 !important;
+    min-width: 0;
+    background-color: color-mix(in oklab, var(--color-ink) 4%, transparent);
+    overflow: hidden;
+    border-radius: 0.75rem;
+  }
+
+  /* Figure-rooted slide: stretch the inner Figure box to fill the slide
+     so the image's containing box has a definite size for object-fit. */
+  .gallery__viewport > figure > div {
+    background-color: transparent !important;
+    border-radius: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Images and inline videos: fill the slide box and let object-fit
+     center + letterbox the actual content. Predictable in flex/grid
+     contexts because the element box has a definite size. */
+  .gallery__viewport img,
+  .gallery__viewport video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* lite-youtube is intrinsically 16:9 and fills the slide naturally. */
+  .gallery__viewport > lite-youtube {
+    width: 100%;
+  }
+
+  /* The Figure's own caption is hidden; the gallery's caption row owns
+     the active-slide caption. */
+  .gallery__viewport figcaption {
+    display: none;
+  }
+
+  /* Caption + controls row below the viewport. */
+  .gallery__bar {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+  @media (min-width: 40rem) {
+    .gallery__bar {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+  }
+
+  .gallery__caption {
+    color: var(--color-ink-soft);
+    font-size: var(--text-meta);
+    line-height: 1.4;
+    margin: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .gallery__controls {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .gallery__btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.95rem;
+    border: 1px solid var(--color-rule);
+    border-radius: 9999px;
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: inherit;
+    font-size: var(--text-meta);
+    cursor: pointer;
+    transition: background 150ms ease, border-color 150ms ease, opacity 150ms ease;
+  }
+  .gallery__btn:hover:not(:disabled) {
+    background: color-mix(in oklab, var(--color-ink) 6%, transparent);
+    border-color: var(--color-ink-soft);
+  }
+  .gallery__btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gallery__viewport {
+      scroll-behavior: auto;
+    }
+  }
+</style>
+
+<script>
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  document.querySelectorAll(".gallery").forEach((root) => {
+    const viewport = root.querySelector(".gallery__viewport") as HTMLElement | null;
+    const captionEl = root.querySelector(".gallery__caption") as HTMLElement | null;
+    const buttons = Array.from(
+      root.querySelectorAll<HTMLButtonElement>(".gallery__btn"),
+    );
+    if (!viewport || !captionEl) return;
+    // Exclude non-visual children (e.g. the lite-youtube custom-element
+    // <script> that astro-embed injects beside the first instance on the
+    // page; otherwise it gets counted as a blank slide and traps Next).
+    const skip = new Set(["SCRIPT", "STYLE", "TEMPLATE"]);
+    const slides = (Array.from(viewport.children) as HTMLElement[]).filter(
+      (el) => !skip.has(el.tagName),
+    );
+    if (slides.length === 0) return;
+
+    const total = slides.length;
+
+    const getCaption = (slide: HTMLElement): string => {
+      if (slide.dataset.caption) return slide.dataset.caption;
+      const fc = slide.querySelector("figcaption");
+      if (fc?.textContent?.trim()) return fc.textContent.trim();
+      const tag = slide.tagName.toLowerCase();
+      if (tag === "lite-youtube") {
+        return (
+          slide.getAttribute("videotitle") ||
+          slide.getAttribute("title") ||
+          ""
+        );
+      }
+      return "";
+    };
+
+    const indexFromScroll = (): number => {
+      const vLeft = viewport.getBoundingClientRect().left;
+      let best = 0;
+      let bestDist = Infinity;
+      slides.forEach((s, i) => {
+        const dist = Math.abs(s.getBoundingClientRect().left - vLeft);
+        if (dist < bestDist) {
+          bestDist = dist;
+          best = i;
+        }
+      });
+      return best;
+    };
+
+    const setUI = (i: number): void => {
+      const slide = slides[i];
+      if (!slide) return;
+      const cap = getCaption(slide);
+      const prefix = `${i + 1} / ${total}`;
+      captionEl.textContent = cap ? `${prefix} · ${cap}` : prefix;
+      buttons.forEach((b) => {
+        const dir = Number(b.dataset.dir);
+        if (dir < 0) b.disabled = i === 0;
+        if (dir > 0) b.disabled = i === total - 1;
+      });
+    };
+
+    const clamp = (n: number, min: number, max: number) =>
+      Math.max(min, Math.min(max, n));
+
+    // While a programmatic smooth-scroll is in flight, ignore the scroll
+    // listener; otherwise it computes the "closest slide so far" each
+    // frame and flips the caption back to the source slide for most of
+    // the animation, settling to the destination only at the end.
+    let isProgrammaticScroll = false;
+    let scrollEndTimer: ReturnType<typeof setTimeout> | 0 = 0;
+    const supportsScrollEnd = "onscrollend" in window;
+
+    const releaseScrollLock = () => {
+      isProgrammaticScroll = false;
+    };
+    if (supportsScrollEnd) {
+      viewport.addEventListener("scrollend", releaseScrollLock);
+    }
+
+    const go = (i: number): void => {
+      const idx = clamp(i, 0, total - 1);
+      const slide = slides[idx];
+      if (!slide) return;
+      isProgrammaticScroll = true;
+      viewport.scrollTo({
+        left: slide.offsetLeft,
+        behavior: reducedMotion ? "auto" : "smooth",
+      });
+      setUI(idx);
+      // Fallback for browsers without scrollend (Safari < 17) and a
+      // safety net in case scrollend doesn't fire (e.g. user-cancelled
+      // smooth scroll).
+      if (scrollEndTimer) clearTimeout(scrollEndTimer);
+      scrollEndTimer = setTimeout(releaseScrollLock, reducedMotion ? 0 : 600);
+    };
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const dir = Number(btn.dataset.dir);
+        go(indexFromScroll() + dir);
+      });
+    });
+
+    viewport.addEventListener("keydown", (e) => {
+      const ke = e as KeyboardEvent;
+      if (ke.key === "ArrowLeft") {
+        ke.preventDefault();
+        go(indexFromScroll() - 1);
+      } else if (ke.key === "ArrowRight") {
+        ke.preventDefault();
+        go(indexFromScroll() + 1);
+      } else if (ke.key === "Home") {
+        ke.preventDefault();
+        go(0);
+      } else if (ke.key === "End") {
+        ke.preventDefault();
+        go(total - 1);
+      }
+    });
+
+    let raf = 0;
+    viewport.addEventListener(
+      "scroll",
+      () => {
+        if (isProgrammaticScroll) return;
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => setUI(indexFromScroll()));
+      },
+      { passive: true },
+    );
+
+    setUI(0);
+  });
+</script>

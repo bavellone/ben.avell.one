@@ -1,0 +1,215 @@
+@import "tailwindcss";
+
+/* Design tokens: quiet-blue accent (#1e40af), Inter, neutral ink scale. */
+@theme {
+  --color-bg: #fafafa;
+  --color-ink: #0a0a0a;
+  --color-ink-soft: #5a5a5a;
+  --color-ink-faint: #b0b0b0;
+  --color-rule: #e6e6e6;
+  --color-accent: #1e40af;
+
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Type scale. clamp() pairs handle responsive sizing. */
+  --text-meta: 0.875rem;
+  --text-body: 1.0625rem;
+  --text-lead: 1.25rem;
+  --text-h3: 1.5rem;
+  --text-h2: 2rem;
+  --text-h1: 2.75rem;
+  --text-display: clamp(3rem, 6vw + 1rem, 6rem);
+
+  --leading-tight: 1.1;
+  --leading-snug: 1.2;
+  --leading-normal: 1.3;
+  --leading-relaxed: 1.6;
+
+  --measure: 68ch;
+  --container-page: 72rem;
+
+  --space-section: clamp(4rem, 8vw, 8rem);
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--leading-relaxed);
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  h1, h2, h3, h4 {
+    color: var(--color-ink);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  h1 { font-size: var(--text-h1); line-height: var(--leading-tight); }
+  h2 { font-size: var(--text-h2); line-height: var(--leading-snug); }
+  h3 { font-size: var(--text-h3); line-height: var(--leading-normal); font-weight: 500; }
+
+  a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+  a:hover { text-decoration-thickness: 2px; }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Honor reduced-motion. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@utility container-page {
+  width: 100%;
+  max-width: var(--container-page);
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+@utility measure {
+  max-width: var(--measure);
+}
+
+/* Wayfinding-link affordance: accent rule grows from the center on
+   hover/focus. Same motif as the Nav wordmark, which also grows on hover.
+   The only difference is the rest state (wordmark keeps a 33% centered stub;
+   these start at 0). Works both as a self-hover link and inside a `.group`
+   card. Reduced-motion is already neutralized by the global
+   prefers-reduced-motion rule in @layer base. */
+.link-grow {
+  position: relative;
+}
+.link-grow::after {
+  content: "";
+  position: absolute;
+  /* Purely decorative: never a hit-test target, or hovering the bar itself
+     re-triggers :hover and causes a grow/shrink flicker loop. */
+  pointer-events: none;
+  left: 0;
+  right: 0;
+  bottom: -0.28em;
+  height: 2px;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 300ms ease-out;
+  /* Immediate on release; the dwell delay below is only on engage. */
+  transition-delay: 0ms;
+}
+.link-grow:hover::after,
+.link-grow:focus-visible::after,
+.group:hover .link-grow::after,
+.group:focus-within .link-grow::after {
+  transform: scaleX(1);
+  /* Dwell: a transient hover (e.g. the pointer still over the link right
+     after a page navigation, or the mouse skimming past) is shorter than
+     this, so the animation never starts and there is no blip. A real hover
+     outlasts it and animates as normal. */
+  transition-delay: 120ms;
+}
+
+/* Click-to-zoom lightbox for project images. Pure CSS (:target), no JS,
+   consistent with the site's zero-hydrated-JS posture and pure-CSS motion.
+   Open: the trigger <a href="#id"> makes .lightbox the :target. Close: the
+   backdrop link (and browser Back) returns to "#id-t" (the thumbnail), so
+   there is no scroll-to-top jump and focus lands back on the trigger.
+   Reduced-motion is already neutralized by the global prefers-reduced-motion
+   rule in @layer base. */
+.zoomable {
+  position: relative;
+  display: block;
+}
+.zoomable__hint {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.875rem;
+  height: 1.875rem;
+  border-radius: 0.375rem;
+  color: var(--color-bg);
+  background: color-mix(in oklab, var(--color-ink) 62%, transparent);
+  /* Visible by default so the zoom affordance reads; firms up on hover/focus. */
+  opacity: 0.72;
+  transition: opacity 200ms ease;
+  /* Decorative: the wrapping <a> is the hit target, not this badge. */
+  pointer-events: none;
+}
+.zoomable:hover .zoomable__hint,
+.zoomable:focus-visible .zoomable__hint {
+  opacity: 1;
+}
+.zoomable__hint svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vw, 3rem);
+  background: color-mix(in oklab, var(--color-ink) 82%, transparent);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 280ms ease,
+    visibility 280ms;
+}
+.lightbox:target {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+.lightbox__bg {
+  position: absolute;
+  inset: 0;
+  cursor: zoom-out;
+}
+.lightbox__img {
+  position: relative;
+  max-width: min(100%, 1280px);
+  max-height: 88vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 0.5rem;
+  box-shadow: 0 12px 48px color-mix(in oklab, var(--color-ink) 45%, transparent);
+  transform: scale(0.96);
+  transition: transform 280ms ease;
+}
+.lightbox:target .lightbox__img {
+  transform: scale(1);
+}

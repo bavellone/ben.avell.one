@@ -1,0 +1,45 @@
+---
+const { pathname } = Astro.url;
+const links: { href: string; label: string }[] = [
+  { href: "/case-studies", label: "Case Studies" },
+  { href: "/projects", label: "Projects" },
+  { href: "/about", label: "About" },
+];
+const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
+---
+
+<nav
+  class="container-page flex flex-col items-center gap-3 py-6 sm:flex-row sm:items-baseline sm:justify-between sm:py-8"
+  aria-label="Primary"
+>
+  <a href="/" class="group relative inline-block no-underline hover:no-underline">
+    <span
+      class="whitespace-nowrap text-base font-extrabold uppercase leading-none tracking-[-0.03em] text-[var(--color-ink)]"
+    >
+      Ben Avellone
+    </span>
+    <span
+      aria-hidden="true"
+      class="pointer-events-none absolute -bottom-1.5 left-0 right-0 h-[2px] origin-center scale-x-[0.33] bg-[var(--color-accent)] transition-transform duration-300 ease-out delay-0 group-hover:scale-x-100 group-hover:delay-[120ms] motion-reduce:transition-none"
+    >
+    </span>
+  </a>
+  <ul class="flex flex-wrap gap-x-5 gap-y-1 text-[var(--text-meta)] sm:gap-6">
+    {
+      links.map(({ href, label }) => (
+        <li>
+          <a
+            href={href}
+            class:list={[
+              "whitespace-nowrap text-[var(--color-ink-soft)] no-underline hover:text-[var(--color-ink)]",
+              isActive(href) && "text-[var(--color-ink)]",
+            ]}
+            aria-current={isActive(href) ? "page" : undefined}
+          >
+            {label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

@@ -1,0 +1,10 @@
+# Copy to terraform.tfvars and fill in. terraform.tfvars is gitignored.
+cloudflare_account_id = "REPLACE_WITH_CLOUDFLARE_ACCOUNT_ID"
+
+# Override only if the defaults in variables.tf are wrong.
+# domain              = "avell.one"
+# pages_subdomain     = "ben"
+# pages_project_name  = "ben-avellone-portfolio"
+# git_owner           = "codescalar"
+# git_repo            = "portfolio"
+# production_branch   = "master"

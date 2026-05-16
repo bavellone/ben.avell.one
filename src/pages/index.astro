@@ -1,0 +1,87 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import CaseStudyCard from "~/components/CaseStudyCard.astro";
+import { projects } from "~/data/projects";
+
+const featured = (await getCollection("caseStudies", ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+// Home shows name + blurb only (no dates/status); blurbs in the shared
+// module are deliberately date/status-free for this surface.
+const selectedProjects = projects.filter((project) => project.featured);
+---
+
+<BaseLayout title="Ben Avellone">
+  <section class="container-page mt-6 sm:mt-24">
+    <div class="grid gap-6 sm:grid-cols-[1fr_minmax(0,18rem)] sm:items-center sm:gap-12">
+      <div>
+        <p class="text-[var(--text-meta)] text-[var(--color-ink-soft)]">Hi, I'm Ben.</p>
+        <h1 class="mt-3 text-[var(--text-display)] font-semibold leading-[var(--leading-tight)] tracking-tight">
+          I'm a full-stack engineer building products end-to-end.
+        </h1>
+        <p class="mt-6 max-w-prose text-[var(--text-meta)] text-[var(--color-ink-faint)]">
+          TypeScript &middot; React &middot; Node &middot; PostgreSQL &middot; Kubernetes
+        </p>
+        <p class="mt-8">
+          <a href="mailto:ben@codescalar.com">Get in touch</a>
+        </p>
+      </div>
+      <img
+        src="/images/headshot.jpg"
+        alt="Ben Avellone"
+        width="800"
+        height="800"
+        class="order-first mx-auto aspect-square w-full max-w-[75vw] rounded-lg object-cover sm:order-none sm:mx-0 sm:max-w-none"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </div>
+  </section>
+
+  {/* Tighter spacing around this block: half the section margin above, and a
+      negative margin below to halve the gap to the next section without
+      changing that section's own margin. */}
+  <section class="container-page mt-[calc(var(--space-section)/2)] mb-[calc(var(--space-section)/-2)]">
+    <div class="measure">
+      <p class="text-[var(--text-lead)] text-[var(--color-ink-soft)]">
+        I work inside the business, not at arm's length from it.
+        I learn it inside and out and operate as a fractional CTO.
+        I take the high-level vision and bring it to life as one or more products, from the ground up, start to finish.
+        I'm not dogmatic about tooling; I prefer to use the best tool for the job. 
+        Reliability trumps cleverness or elegance.
+      </p>
+    </div>
+  </section>
+
+  <section class="container-page mt-[var(--space-section)]">
+    <h2 class="text-[var(--text-h2)] font-semibold tracking-tight">Case studies</h2>
+    <div class="mt-10 grid gap-12 sm:grid-cols-2">
+      {featured.map((entry) => <CaseStudyCard entry={entry} />)}
+    </div>
+  </section>
+
+  <section class="container-page mt-[var(--space-section)]">
+    <h2 class="text-[var(--text-h2)] font-semibold tracking-tight">Selected projects</h2>
+    <ul class="mt-10 divide-y divide-[var(--color-rule)]">
+      {
+        selectedProjects.map((project) => (
+          <li class="py-6 first:pt-0">
+            <p class="text-[var(--text-h3)] font-medium">{project.name}</p>
+            <p class="mt-2 max-w-prose text-[var(--color-ink-soft)]">{project.blurb}</p>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="mt-8">
+      <a href="/projects" class="link-grow inline-block text-[var(--color-accent)] no-underline">More work &rarr;</a>
+    </p>
+  </section>
+
+  <section class="container-page mt-[var(--space-section)] flex flex-wrap gap-6">
+    <a href="mailto:ben@codescalar.com">Email</a>
+    <a href="https://github.com/bavellone">GitHub</a>
+    <a href="https://www.linkedin.com/in/ben-avellone-858481219/">LinkedIn</a>
+  </section>
+</BaseLayout>

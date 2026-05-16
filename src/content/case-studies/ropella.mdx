@@ -1,0 +1,53 @@
+---
+title: Ropella360 Suite
+oneline: "Six years building a suite of over a dozen applications for an executive search firm: information-dense dashboards, candidate assessment platforms, and document packaging workflows used daily by recruiting professionals."
+role: In-house engineering team of one
+client: Ropella Group
+dates: May 2020 – Present
+stack:
+  - TypeScript
+  - React
+  - Next.js
+  - Node.js
+  - PostgreSQL
+  - MSSQL
+  - PHP
+  - OAuth2
+  - Kubernetes
+  - Docker
+  - Terraform
+  - GCP
+  - QuickBooks
+companyUrl: https://ropella360.com
+heroTreatment: image
+heroImage: ../../assets/case-studies/ropella/cloud-architecture.svg
+heroAlt: "Cloud architecture diagram of the Ropella360 suite: an Azure OAuth2 single sign-on proxy in front of more than a dozen line-of-business apps (Skill Surveys, Candidate Packaging, the Compensation Calculator, stats dashboards, executive reports) running on a Google Kubernetes Engine cluster, with the CRM, QuickBooks, and WordPress integrations alongside."
+order: 2
+draft: false
+---
+
+## About Ropella Group
+
+Ropella Group is an executive search firm specializing in the chemical industry. They recruit senior leadership for specialty chemical, polymer, and coatings companies. The firm runs a high-touch recruiting process built on research, candidate identification, candidate packaging, and presentation. Software is the daily operational backbone of how that work gets done.
+
+{/* Asset slot: company video and a sample dashboard/Skill-Survey screenshot to land here when Ben supplies them. */}
+
+## Problem
+
+An executive search firm specializing in the chemical industry needed in-house engineering capability without an in-house engineering team. The existing stack was a mix of legacy PHP applications still doing real work and a backlog of features that needed modern TypeScript. Operational decisions depend daily on the software being right: pipeline tracking, candidate flow, custom document output. The cost of getting it wrong is paid the same day.
+
+## Approach
+
+Replacing the legacy PHP wholesale would have been a multi-year effort with everything else paused. Instead, shared base Docker images, Terraform-managed infrastructure, and common libraries for CRM access and data types let PHP and TypeScript pieces interoperate without either one needing to know the other's shape. A bespoke nginx authentication proxy put Azure OAuth2 single sign-on in front of any line-of-business app without changing its code, giving the whole suite an intranet without a VPN.
+
+The internal dashboards are information-dense and real-time. One drives a stats wall on monitors around the office: call metrics pulled from the VoIP provider's API, per-person numbers recomputed live. A caching layer in front of the database keeps daily-use pages snappy under sustained reads.
+
+The Skill Surveys platform is public-facing. Candidates take assessments by progressive disclosure, TurboTax-style, one question at a time. Completed surveys export to PDF and feed straight into packaging.
+
+Candidate Packaging assembles PDFs dynamically: take multiple uploaded documents, merge them, inject custom cover pages and headers/footers, output a single client-ready package.
+
+The Compensation Calculator models a full package (salary, bonus, 401(k), pension, benefits cost, equity, relocation) and sets a candidate's current compensation against a prospective offer, computing the difference line by line into a client-ready PDF. The hard part is the domain model: compensation arrives in shapes that don't line up cleanly, and the comparison is only as good as the modeling underneath.
+
+## Outcome
+
+Six years as the in-house engineering function for the firm. Over a dozen applications across the suite, used daily by the C-suite, managers, and recruiters. Shared infrastructure (Terraform modules, Docker base images, CRM client library) has carried the suite through several feature waves without a rewrite.

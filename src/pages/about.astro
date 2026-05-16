@@ -1,0 +1,131 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro'
+---
+
+<BaseLayout title='About' description='Full-stack engineer and founder of CodeScalar LLC. Remote, U.S. Central time.'>
+	<section class='container-page mt-12 sm:mt-20'>
+		<div class='grid gap-12 sm:grid-cols-[minmax(0,18rem)_1fr] sm:items-start'>
+			<img
+				src='/images/headshot.jpg'
+				alt='Ben Avellone'
+				width='800'
+				height='800'
+				class='aspect-square w-full rounded-lg object-cover'
+				fetchpriority='high'
+				decoding='async'
+			/>
+			<div class='measure'>
+				<h1 class='text-[var(--text-h1)] font-semibold tracking-tight'>About</h1>
+				<p class='mt-6 text-[var(--text-lead)] text-[var(--color-ink-soft)]'>
+					I'm a full-stack engineer and the founder of CodeScalar LLC, working remotely from the U.S. Central time zone.
+					I've spent about fifteen years building software end-to-end: almost always as the technical lead, usually on a
+					small team or alone, and always for stakeholders who needed me to understand their business as well as their
+					code. CodeScalar has run since 2019, continuing the client work I started as Coastware in 2016 and as an
+					independent developer before that, mostly small and mid-sized businesses. The longest of those engagements are
+					<a href='/case-studies/bsi'>still active today</a>.
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<section class='container-page mt-[var(--space-section)]'>
+		<div class='measure'>
+			<h2 class='text-[var(--text-h2)] font-semibold tracking-tight'>What I'm looking for</h2>
+			<p class='mt-6 text-[var(--color-ink-soft)]'>
+				I'm looking for a senior or staff IC role with real ownership: end-to-end product work, full-stack, comfortable
+				with ambiguity. Small team, low process, async-friendly, tenured peers who take the craft seriously. I highly
+				value autonomy and being able to make decisions based on a high-level vision and direction. Ideally, I want to
+				work with people I can exchange knowledge with and grow each other professionally.
+			</p>
+			<p class='mt-4 text-[var(--color-ink-soft)]'>
+				After fifteen years mostly on my own, part of what I'm looking for is the thing my solo career has been light
+				on: working on a larger team with other like-minded and skilled individuals.
+			</p>
+			<p class='mt-4 text-[var(--color-ink-soft)]'>
+				I'm not very interested in orgs with lots of unnecessary process theater. I prefer smaller, nimble organizations
+				that aren't tied down by bureaucracy and inflexible rules that can't be revisited. I want to work within a
+				system that is critical of itself and demands excellence, openness, and willingness to adapt to changing
+				market/product conditions.
+			</p>
+		</div>
+	</section>
+
+	<section class='container-page mt-[var(--space-section)]'>
+		<div class='measure'>
+			<h2 class='text-[var(--text-h2)] font-semibold tracking-tight'>How I think</h2>
+			<p class='mt-6 text-[var(--color-ink-soft)]'>
+				When handed a problem, my first instinct is to step back and ask what we're actually trying to do, and why. Most
+				of the cost of bad software is paid upstream of the code, in assumptions no one questioned. I'd rather spend an
+				extra hour clarifying the goal than ship something well-built that solves the wrong problem.
+			</p>
+			<p class='mt-4 text-[var(--color-ink-soft)]'>
+				I'm picky about the language I use, in code, writing, and in conversation. I'll often revise an important email
+				or document a few times until I'm satisfied with it, keeping in mind not to "let perfect be the enemy of good."
+			</p>
+			<p class='mt-4 text-[var(--color-ink-soft)]'>
+				I'm a very detail-oriented person and will sweat the details when it matters. I enjoy discussing and <a
+					href='/case-studies/wpmh'>weighing tradeoffs</a
+				> before embarking on implementation. At the end of the day, what's most important is solving the problem at hand,
+				both in the immediate sense (this feature needs to work well) and the long-term horizon (this product needs to make
+				sense).
+			</p>
+			<p class='mt-4 text-[var(--color-ink-soft)]'>
+				I enjoy breaking complex ideas or tech down to their constituent components, understanding each piece, and being
+				able to <a href='/case-studies'>explain everything at any abstraction level</a> with minimal loss of nuance. This
+				has served me well working with a wide range of people - from end-users to CEOs.
+			</p>
+		</div>
+	</section>
+
+	<section class='container-page mt-[var(--space-section)]'>
+		<div class='measure'>
+			<h2 class='text-[var(--text-h2)] font-semibold tracking-tight'>On AI tooling</h2>
+			<p class='mt-6 text-[var(--color-ink-soft)]'>
+				I held off on AI tooling for software development until recently. My career has trended toward more
+				deterministic, reproducible, and declarative paradigms (Kubernetes, Terraform/IaC, functional/pure programming),
+				and early AI tooling felt like a step backwards. By late 2025 the tradeoffs had shifted decisively, and it was
+				clear where the industry is headed. Since then I've been folding these tools into my workflow deliberately, with
+				care and caution.
+			</p>
+			<p class='mt-4 text-[var(--color-ink-soft)]'>
+				I had previously dabbled in personal usage of AI for development using tools like Aider but found them lacking.
+				I started using Claude Code when I saw how good the models and harnesses have gotten. In early 2026 I began
+				using it professionally for a client project to rewrite an internal legacy PHP app into a modern TS/Node
+				codebase with support for turning it into a paid SaaS app, the <a href='/projects'>AI-First SaaS Rewrite</a> project.
+			</p>
+
+			<p class='mt-4 text-[var(--color-ink-soft)]'>
+				I've found a few things are extremely important for maintaining cohesion and continuity while using AI-first or
+				AI-assisted development:
+			</p>
+			<h3 class='mt-8 text-[var(--text-h3)] font-medium tracking-tight'>
+				Own the architecture, the abstractions, and the decision making
+			</h3>
+			<p class='mt-3 text-[var(--color-ink-soft)]'>
+				Rubber-ducking is great but don't let AI make any important decisions by itself - anything you underspecify is
+				liable to be a headache down the road.
+			</p>
+			<h3 class='mt-8 text-[var(--text-h3)] font-medium tracking-tight'>
+				Workflow is more important than the model or harness
+			</h3>
+			<p class='mt-3 text-[var(--color-ink-soft)]'>
+				Research, red/green/blue TDD and bespoke tooling for the agent specific to the codebase (e.g. CLIs, custom
+				skills/commands) are incredibly valuable and worth investing in early.
+			</p>
+		</div>
+	</section>
+
+	<section class='container-page mt-[var(--space-section)]'>
+		<div class='measure flex flex-wrap items-center gap-6'>
+			<a
+				href='/resume.pdf'
+				class='rounded-md border border-[var(--color-ink)] px-4 py-2 no-underline hover:bg-[var(--color-ink)] hover:text-[var(--color-bg)]'
+			>
+				Download r&eacute;sum&eacute; (PDF)
+			</a>
+			<a href='mailto:ben@codescalar.com'>Email</a>
+			<a href='https://github.com/bavellone'>GitHub</a>
+			<a href='https://www.linkedin.com/in/ben-avellone-858481219/'>LinkedIn</a>
+		</div>
+	</section>
+</BaseLayout>

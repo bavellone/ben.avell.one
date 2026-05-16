@@ -1,0 +1,23 @@
+---
+import { YouTube } from "@astro-community/astro-embed-youtube";
+
+interface Props {
+  id: string;
+  title: string;
+}
+
+const { id, title } = Astro.props;
+---
+
+<YouTube id={id} title={title} class="liteyt" />
+
+<style is:global>
+  /* Trim the lite-youtube facade to a single shared visual treatment. */
+  lite-youtube.liteyt {
+    width: 100%;
+    max-width: none;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    background-color: color-mix(in oklab, var(--color-ink) 4%, transparent);
+  }
+</style>

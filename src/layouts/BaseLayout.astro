@@ -1,0 +1,95 @@
+---
+import "@fontsource-variable/inter";
+import "~/styles/global.css";
+import Nav from "~/components/Nav.astro";
+import Footer from "~/components/Footer.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = "Full-stack engineer. End-to-end product ownership across a decade of production systems.",
+} = Astro.props;
+
+const SITE_NAME = "Ben Avellone";
+const SITE_TAGLINE = "Full-stack engineer";
+
+// Home passes title === SITE_NAME; give it a role-bearing document title for
+// search (recruiters query name + role). Inner pages stay "<page> | <name>".
+const fullTitle =
+  title === SITE_NAME ? `${SITE_NAME} - ${SITE_TAGLINE}` : `${title} | ${SITE_NAME}`;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
+const siteOrigin = new URL(Astro.site!).origin;
+
+// Per-page OG card, generated at build by src/pages/og/[...route].ts.
+// Derive the route key from the pathname; keys must match that file's `pages` map.
+const cleanPath = Astro.url.pathname.replace(/\/+$/, "");
+const ogKey = cleanPath === "" ? "home" : cleanPath.slice(1);
+const ogImageUrl = new URL(`/og/${ogKey}.png`, Astro.site).toString();
+
+// Site-wide Person JSON-LD: lets search engines resolve "Ben Avellone" as an
+// entity and tie the profile to GitHub/LinkedIn. Identical on every page.
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: SITE_NAME,
+  url: siteOrigin,
+  jobTitle: SITE_TAGLINE,
+  worksFor: { "@type": "Organization", name: "CodeScalar LLC" },
+  address: {
+    "@type": "PostalAddress",
+    addressCountry: "US",
+  },
+  sameAs: [
+    "https://github.com/bavellone",
+    "https://www.linkedin.com/in/ben-avellone-858481219/",
+  ],
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={fullTitle} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-[var(--color-ink)] focus:px-3 focus:py-2 focus:text-[var(--color-bg)] focus:no-underline"
+    >
+      Skip to content
+    </a>
+    <Nav />
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

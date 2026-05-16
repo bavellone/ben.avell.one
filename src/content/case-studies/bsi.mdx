@@ -1,0 +1,100 @@
+---
+title: BSI Certification Portal
+oneline: A decade of running the core business software for a life-support equipment company in the regulated Oil & Gas industry. Technicians, management, and clients all use it daily.
+role: Sole engineer
+client: Breathing Systems Inc.
+dates: April 2015 – Present
+stack:
+  - AngularJS
+  - Node.js
+  - MongoDB
+  - Kubernetes
+  - GCP
+  - Terraform
+  - PDF generation
+liveUrl: https://portal.breathingsystemsinc.com
+companyUrl: https://breathingsystems.us
+heroTreatment: image
+heroImage: ../../assets/case-studies/bsi/air-control-5002.png
+heroAlt: "Close-up of a Breathing Systems Air Control System Model 5002 panel, with two regulated-air-supply pressure gauges above the engraved company nameplate."
+order: 4
+draft: false
+---
+
+import Figure from "~/components/Figure.astro";
+import Gallery from "~/components/Gallery.astro";
+import LiteYouTube from "~/components/LiteYouTube.astro";
+import fieldImg from "~/assets/case-studies/bsi/field-deployment.jpg";
+import portalPoster from "~/assets/case-studies/bsi/portal-intro-poster.jpg";
+import fbDefine from "~/assets/case-studies/bsi/formbuilder-define.png";
+import fbEnter from "~/assets/case-studies/bsi/formbuilder-enter.png";
+import fbView from "~/assets/case-studies/bsi/formbuilder-view.png";
+
+## About Breathing Systems Inc.
+
+Breathing Systems makes supplied-air life-support equipment for industrial confined-space work. Their helmets and breathing systems are NIOSH and CE approved and used internationally in oil and gas refining, petrochemical plants, LNG facilities, and similar settings, for hazardous tasks like catalyst handling and inert-vessel entry. The work is dangerous; the equipment is the line between routine and fatal.
+
+Inspections happen daily in the field. Equipment that's out of certification can't be used safely, and a missed recert is a compliance and human-safety risk. The portal I built tracks the maintenance status of every piece of equipment BSI services and notifies management before anything goes out of date.
+
+<Gallery ariaLabel="Breathing Systems Inc.: company overview, field deployment, and portal walkthrough">
+  <LiteYouTube id="A1iQpM44m44" title="What Breathing Systems Inc. does: a company overview" />
+
+  <Figure
+    src={fieldImg}
+    alt="Technicians in confined-space industrial settings wearing BSI clamshell helmets and breathing systems."
+    caption="The equipment in use, in confined-space petrochemical and industrial settings."
+  />
+
+  <Figure caption="A walkthrough of the certification portal, the system this case study is about.">
+    <video
+      controls
+      preload="metadata"
+      playsinline
+      poster={portalPoster.src}
+      class="block h-auto w-full"
+    >
+      <source src="/videos/bsi/portal-intro.mp4" type="video/mp4" />
+      Your browser does not support embedded video.
+    </video>
+  </Figure>
+</Gallery>
+
+## Problem
+
+A life-support equipment company needed to track maintenance status across equipment deployed in the field globally. Out-of-certification equipment fails compliance and puts workers at risk. Inspections happen daily, and management needs lead time to schedule recertification visits before equipment expires. Off-the-shelf certification software didn't fit the workflow. Bespoke software had to outlast whoever built it.
+
+## Approach
+
+The Form Builder lets management define new inspection types without engineering involvement. The data model accepts new shapes as data, so new inspection forms ship at the speed someone can fill out a form definition.
+
+<Gallery ariaLabel="BSI Form Builder: defining an inspection type, filling it in the field, and viewing the completed inspection.">
+  <Figure
+    src={fbDefine}
+    alt="The Form Builder editing an inspection type, showing checkbox and table field definitions with column types and spec values."
+    caption="Creating an inspection type in the Form Builder: fields, choices, and a spec table defined as data, no engineering involved."
+  />
+
+  <Figure
+    src={fbEnter}
+    alt="A generated inspection form with pass/fail controls and a data-entry table for pressure and flow readings against minimum and maximum specs."
+    caption="The generated form a technician fills in the field, checked against the defined spec."
+  />
+
+  <Figure
+    src={fbView}
+    alt="The same inspection in read-only view mode with print and delete actions and the recorded readings."
+    caption="The completed inspection, viewable and printable into a customer report."
+  />
+</Gallery>
+
+The PDF rendering pipeline composes customer-ready reports from templates, uploaded technician signatures, and inspection data captured in the field. Output is consistent across thousands of inspections.
+
+Automated notifications fire sixty days before equipment falls out of certification. That's the lead time management needs to schedule recertification visits.
+
+The stack (AngularJS, Node, MongoDB, Kubernetes) was chosen with a decade of solo maintenance in mind. Boring beats novel when one engineer has to maintain it for ten years.
+
+## Outcome
+
+6,900+ pieces of equipment across 40+ types, in use at over 70 organizations by more than 280 technicians. Over 18,000 inspections logged and more than 400 personnel certifications tracked as of May 2026. Continuously in production since April 2015.
+
+A decade of one engineer maintaining the same codebase makes the choices visible. The Form Builder has paid back many times over: 40+ equipment types now defined as data, not code. The dull stack is still doing what it was picked to do.

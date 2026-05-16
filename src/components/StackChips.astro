@@ -1,0 +1,23 @@
+---
+interface Props {
+  items: string[];
+  class?: string;
+}
+const { items, class: className } = Astro.props;
+---
+
+<ul
+  class:list={[
+    "flex flex-wrap gap-2 text-[var(--text-meta)]",
+    className,
+  ]}
+  aria-label="Technology stack"
+>
+  {
+    items.map((item) => (
+      <li class="rounded-md bg-[color-mix(in_oklab,var(--color-ink)_5%,transparent)] px-2.5 py-1 text-[var(--color-ink-soft)]">
+        {item}
+      </li>
+    ))
+  }
+</ul>
