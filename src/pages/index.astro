@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "~/layouts/BaseLayout.astro";
 import CaseStudyCard from "~/components/CaseStudyCard.astro";
 import { projects } from "~/data/projects";
+import { Image } from "astro:assets"
 
 const featured = (await getCollection("caseStudies", ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order,
@@ -28,14 +29,13 @@ const selectedProjects = projects.filter((project) => project.featured);
           <a href="mailto:ben@codescalar.com">Get in touch</a>
         </p>
       </div>
-      <img
+      <Image
         src="/images/headshot.jpg"
         alt="Ben Avellone"
         width="800"
         height="800"
         class="order-first mx-auto aspect-square w-full max-w-[75vw] rounded-lg object-cover sm:order-none sm:mx-0 sm:max-w-none"
-        fetchpriority="high"
-        decoding="async"
+        priority
       />
     </div>
   </section>
@@ -46,11 +46,12 @@ const selectedProjects = projects.filter((project) => project.featured);
   <section class="container-page mt-[calc(var(--space-section)/2)] mb-[calc(var(--space-section)/-2)]">
     <div class="measure">
       <p class="text-[var(--text-lead)] text-[var(--color-ink-soft)]">
+        I work with businesses to bring products from idea to execution.
         I work inside the business, not at arm's length from it.
         I learn it inside and out and operate as a fractional CTO.
-        I take the high-level vision and bring it to life as one or more products, from the ground up, start to finish.
         I'm not dogmatic about tooling; I prefer to use the best tool for the job. 
-        Reliability trumps cleverness or elegance.
+        Reliability and simplicity trumps cleverness and elegance.
+        Slow is smooth, smooth is fast.
       </p>
     </div>
   </section>
@@ -58,7 +59,7 @@ const selectedProjects = projects.filter((project) => project.featured);
   <section class="container-page mt-[var(--space-section)]">
     <h2 class="text-[var(--text-h2)] font-semibold tracking-tight">Case studies</h2>
     <div class="mt-10 grid gap-12 sm:grid-cols-2">
-      {featured.map((entry) => <CaseStudyCard entry={entry} />)}
+      {featured.map((entry, i) => <CaseStudyCard entry={entry} eager={i < 2} />)}
     </div>
   </section>
 

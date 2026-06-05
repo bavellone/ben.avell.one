@@ -26,25 +26,99 @@ order: 2
 draft: false
 ---
 
+import Figure from "~/components/Figure.astro";
+import Gallery from "~/components/Gallery.astro";
+import dashCampaign from "~/assets/case-studies/ropella/dashboard-bd-campaign-analytics.png";
+import dashXcavate from "~/assets/case-studies/ropella/dashboard-xcavate-admin.png";
+import dashSearch from "~/assets/case-studies/ropella/dashboard-search-analytics.png";
+import dashExec from "~/assets/case-studies/ropella/dashboard-executive-search.png";
+import skillCandidate from "~/assets/case-studies/ropella/skill-survey-candidate.png";
+import skillAdmin from "~/assets/case-studies/ropella/skill-survey-admin.png";
+import liveResearch from "~/assets/case-studies/ropella/livestats-research.png";
+import liveBd from "~/assets/case-studies/ropella/livestats-bd.png";
+import packaging from "~/assets/case-studies/ropella/packaging.png";
+
 ## About Ropella Group
 
-Ropella Group is an executive search firm specializing in the chemical industry. They recruit senior leadership for specialty chemical, polymer, and coatings companies. The firm runs a high-touch recruiting process built on research, candidate identification, candidate packaging, and presentation. Software is the daily operational backbone of how that work gets done.
-
-{/* Asset slot: company video and a sample dashboard/Skill-Survey screenshot to land here when Ben supplies them. */}
+Ropella Group is an executive search firm specializing in the chemical industry. They recruit senior leadership for specialty chemical, polymer, and coatings companies. The firm runs a high-touch recruiting process built on research, candidate identification, candidate packaging, and presentation. A mix of off-the-shelf and bespoke software is the daily operational backbone which ties everything together.
 
 ## Problem
 
-An executive search firm specializing in the chemical industry needed in-house engineering capability without an in-house engineering team. The existing stack was a mix of legacy PHP applications still doing real work and a backlog of features that needed modern TypeScript. Operational decisions depend daily on the software being right: pipeline tracking, candidate flow, custom document output. The cost of getting it wrong is paid the same day.
+An executive search firm specializing in the chemical industry needed in-house engineering capability without an in-house engineering team. The existing stack was a mix of brittle legacy PHP applications and a backlog of features and issues that needed modern SDLC processes. 
+
+Their IT employee had created most of the internal software being used: pipeline tracking, candidate flow, custom document output, etc. When they left, the chewing gum and duct tape started to wear thin and they needed someone with real software chops to modernize and maintain their applications and processes.
 
 ## Approach
 
-Replacing the legacy PHP wholesale would have been a multi-year effort with everything else paused. Instead, shared base Docker images, Terraform-managed infrastructure, and common libraries for CRM access and data types let PHP and TypeScript pieces interoperate without either one needing to know the other's shape. A bespoke nginx authentication proxy put Azure OAuth2 single sign-on in front of any line-of-business app without changing its code, giving the whole suite an intranet without a VPN.
+Replacing the legacy PHP wholesale would have been a multi-year effort with everything else paused. Instead, shared base Docker images, Terraform-managed infrastructure, and common libraries for CRM access and data types let PHP and TypeScript pieces interoperate without tight coupling and expensive migrations. A bespoke nginx authentication proxy put Azure OAuth2 single sign-on in front of any line-of-business app without changing its code, giving the whole suite an intranet without a VPN.
 
-The internal dashboards are information-dense and real-time. One drives a stats wall on monitors around the office: call metrics pulled from the VoIP provider's API, per-person numbers recomputed live. A caching layer in front of the database keeps daily-use pages snappy under sustained reads.
+The internal dashboards are information-dense and real-time. A caching layer in front of the database keeps daily-use pages snappy under sustained reads.
+
+<Gallery ariaLabel="Internal analytics dashboards: business-development campaigns, research-team sourcing, search KPIs, and the executive triage view.">
+  <Figure
+    src={dashCampaign}
+    alt="The BD Campaign Analytics dashboard: a filterable table of business-development campaigns by type, title, and assignment, each row showing percent complete and counts of opportunities, attempts, and meetings, above summary tiles for total and average activity, attempts, and meetings."
+    caption="Business-development campaign analytics: every campaign's activity rolled up live, filterable by title, type, and status."
+  />
+
+  <Figure
+    src={dashXcavate}
+    alt="The Xcavate research-team admin dashboard: searches filtered by launch date, status, list type, company, FileFinder assignment, lead researcher, and time punches, with team-KPI tiles for average adds per hour, average hours per search, and percent of searches under two hundred candidates, above a very wide sortable table of per-search sourcing metrics — pipeline remaining, adds per hour, list-building hours, and candidate-stage counts — that can be grouped by researcher."
+    caption="The research team's sourcing operations board: per-search pipeline and productivity metrics, with time-punch tracking and a group-by-researcher view."
+  />
+
+  <Figure
+    src={dashSearch}
+    alt="The Ropella Search Analytics dashboard: active searches filtered by client partner, recruiter, company, or assignment and by launch or placement date, with quarter preset filters, KPI tiles for days-to-candidates and speed-to-placement, and a wide sortable table whose columns for salary, total comp, interviews, and activity can be toggled on and off."
+    caption="Search analytics: recruiting KPIs over a sortable, column-configurable table of every active search, with quarter presets and one-click export."
+  />
+
+  <Figure
+    src={dashExec}
+    alt="The Executive Search Dashboard: a management triage view of active searches filtered by client partner, ESC, company, position, or status, each row color-coding its assigned ESC by health and listing compensation, fee details, payment milestones, search age, and candidate-stage and activity counts, with prompts across the top asking which searches need more research, recruiting, or email marketing."
+    caption="The management triage board: every active search aged and color-coded by health, with compensation, fee, and activity at a glance for daily prioritization."
+  />
+</Gallery>
+
+One of them drives a stats wall on monitors around the office: call metrics pulled from the VoIP provider's API, per-person numbers recomputed live and rotated between teams.
+
+<Gallery ariaLabel="LiveStats wall boards shown on office monitors: the research and business-development scoreboards.">
+  <Figure
+    src={liveResearch}
+    alt="A full-screen LiveStats wall board titled Research Core Scores: per-recruiter rows scored across activity points, candidates submitted, candidate interviews, sales presentations, and retainers sold, each broken out into daily, weekly, monthly, and quarterly columns, with a rotating motivational quote across the bottom."
+    caption="The research team's live scoreboard, recomputed from source data and rotated between teams on the hallway monitors."
+  />
+
+  <Figure
+    src={liveBd}
+    alt="A full-screen LiveStats wall board titled BD Core Scores: a targets row above per-person rows tracking total calls, activity points, executive briefs, video-conference calls, exploratory discussions, sales presentations, and searches sold across daily, weekly, and monthly columns."
+    caption="The business-development board, every metric measured against its daily, weekly, and monthly target."
+  />
+</Gallery>
 
 The Skill Surveys platform is public-facing. Candidates take assessments by progressive disclosure, TurboTax-style, one question at a time. Completed surveys export to PDF and feed straight into packaging.
 
+<Gallery ariaLabel="The Skill Surveys platform: the candidate-facing intake and the recruiter-facing console.">
+  <Figure
+    src={skillCandidate}
+    alt="The public Skill Survey intake screen under the SMART Search System brand: a candidate enters first name, last name, and email to begin an assessment for a specific position, with a note that a return link will be emailed so the survey can be resumed at any time."
+    caption="The candidate's entry point. The assessment then unfolds one question at a time, with progress saved so it can be resumed from an emailed link."
+  />
+
+  <Figure
+    src={skillAdmin}
+    alt="The Skill Survey console in Ropella360 WebOffice: a per-search roster of candidate assessments with search and date filters, each row showing creation date, name, email, and a completion percentage, plus per-candidate actions to download or preview the PDF, copy the survey link, edit, or unlock; completed rows are highlighted green."
+    caption="The recruiter side for a single search: track each candidate's progress, then export the completed assessment to PDF."
+  />
+</Gallery>
+
 Candidate Packaging assembles PDFs dynamically: take multiple uploaded documents, merge them, inject custom cover pages and headers/footers, output a single client-ready package.
+
+<Figure
+  src={packaging}
+  alt="The Candidate Packaging tool, split-screen: a left panel selects the source PDFs and builds a cover page — choosing cover type, candidate, position, company, location, and client-partner contact details — beside a live preview of the generated Ropella360 'Executive Report' cover page it produces."
+  caption="Candidate Packaging: merge uploaded documents and generate a branded cover page, previewed live before producing one client-ready PDF."
+/>
 
 The Compensation Calculator models a full package (salary, bonus, 401(k), pension, benefits cost, equity, relocation) and sets a candidate's current compensation against a prospective offer, computing the difference line by line into a client-ready PDF. The hard part is the domain model: compensation arrives in shapes that don't line up cleanly, and the comparison is only as good as the modeling underneath.
 

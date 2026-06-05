@@ -77,9 +77,12 @@ const { ariaLabel, class: className } = Astro.props;
     border-radius: 0.75rem;
   }
 
-  /* Figure-rooted slide: stretch the inner Figure box to fill the slide
-     so the image's containing box has a definite size for object-fit. */
-  .gallery__viewport > figure > div {
+  /* Figure-rooted slide: stretch the inner Figure media box to fill the
+     slide so the image's containing box has a definite size for object-fit.
+     Targets the .figure__media frame (a <div>, or an <a> when the image is
+     zoomable) and deliberately excludes the figure's fixed-position
+     .lightbox overlay, which sizes itself. */
+  .gallery__viewport > figure > .figure__media {
     background-color: transparent !important;
     border-radius: 0;
     width: 100%;
@@ -88,8 +91,10 @@ const { ariaLabel, class: className } = Astro.props;
 
   /* Images and inline videos: fill the slide box and let object-fit
      center + letterbox the actual content. Predictable in flex/grid
-     contexts because the element box has a definite size. */
-  .gallery__viewport img,
+     contexts because the element box has a definite size. The enlarged
+     lightbox image is fixed-position and styled in global.css, so it must
+     not be stretched to the slide box. */
+  .gallery__viewport img:not(.lightbox__img),
   .gallery__viewport video {
     display: block;
     width: 100%;

@@ -106,14 +106,14 @@ const {
       </div>
     </header>
 
-    <div class="prose-body measure mx-auto">
-      <slot />
-    </div>
-
     <section class="measure mx-auto mt-[var(--space-section)]">
       <h2 class="text-[var(--text-h3)] font-medium">Stack</h2>
       <StackChips items={stack} class="mt-4" />
     </section>
+
+    <div class="prose-body measure mx-auto">
+      <slot />
+    </div>
 
     <p class="container-page mt-[var(--space-section)] text-[var(--text-meta)]">
       <a href="/case-studies" class="link-grow inline-block text-[var(--color-accent)] no-underline">&larr; All case studies</a>

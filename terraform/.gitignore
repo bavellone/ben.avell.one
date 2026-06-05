@@ -7,3 +7,5 @@ crash.*.log
 # Never commit a populated tfvars -- it can carry account IDs and secrets.
 *.tfvars
 !*.tfvars.example
+
+README.md

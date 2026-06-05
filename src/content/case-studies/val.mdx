@@ -1,0 +1,107 @@
+---
+title: Today's VAL Valuation Platform
+oneline: "A self-serve SaaS that valued a small business in minutes instead of weeks. A greenfield rebuild of a broken prototype into a secure, cloud-native product: an SDE-based valuation engine with industry multiples and a debt-service purchase test, a public freemium funnel, QuickBooks-pulled financials, and Stripe billing."
+role: Architect & sole engineer
+dates: July 2021 – June 2023
+stack:
+  - TypeScript
+  - React
+  - Redux
+  - Node.js
+  - Express
+  - PostgreSQL
+  - Stripe
+  - QuickBooks
+  - Postmark
+  - PDF generation
+  - Kubernetes
+  - GKE
+  - Docker
+  - Terraform
+  - GCP
+heroTreatment: image
+heroImage: ../../assets/case-studies/val/logo.svg
+heroAlt: "The Today's VAL logo: the wordmark TODAY'S VAL, with a dollar sign in place of the apostrophe-S, beneath a small green rising-bar-chart mark."
+order: 4
+draft: false
+---
+
+import Figure from "~/components/Figure.astro";
+import Gallery from "~/components/Gallery.astro";
+import khPoster from "~/assets/case-studies/val/kh-promo-poster.jpg";
+import reportPage1 from "~/assets/case-studies/val/report/page-1.png";
+import reportPage2 from "~/assets/case-studies/val/report/page-2.png";
+import reportPage3 from "~/assets/case-studies/val/report/page-3.png";
+import reportPage4 from "~/assets/case-studies/val/report/page-4.png";
+import reportPage5 from "~/assets/case-studies/val/report/page-5.png";
+
+## About Today's VAL
+
+Today's VAL was a SaaS product for putting a number on a small business. A traditional business valuation runs into the thousands of dollars and takes weeks; the product gave a business owner or broker a defensible estimate in minutes, from a few years of financials and a handful of guided questions. The two audiences were owners weighing a sale and the brokers who advise them.
+
+<Figure caption="The product's promotional spot, with an endorsement from Kevin Harrington of Shark Tank.">
+  <video
+    controls
+    preload="metadata"
+    playsinline
+    poster={khPoster.src}
+    class="block h-auto w-full"
+  >
+    <source src="/videos/val/kh-promo.mp4" type="video/mp4" />
+    Your browser does not support embedded video.
+  </video>
+</Figure>
+
+## Problem
+
+I inherited the product as a first-draft MVP from a previous developer. It barely cleared the bar of working: not cloud-native, security holes throughout, and coded too sloppily to maintain or extend. The idea had backing — a client who owned the IP and funded the marketing — but nothing underneath it you could safely put in front of paying customers.
+
+The job was two things at once. Rebuild the foundation into something secure, maintainable, and launchable to the public with self-serve signup and billing. And get the valuation itself right, because the output is the product: an owner or broker has to trust the number enough to act on it.
+
+## Approach
+
+I rebuilt it greenfield, treating the old code only as a reference for what the product was meant to do. The new stack is TypeScript end to end — React and Redux in the browser, Express on Node, PostgreSQL behind it — running on Kubernetes on GKE with the infrastructure in Terraform. Security was a first-class concern this time: bcrypt password hashing, CSRF protection, reCAPTCHA Enterprise on the public forms, and Have I Been Pwned checks rejecting breached passwords at signup.
+
+The valuation engine is the core. It uses the Seller's Discretionary Earnings method: take a business's profit and add back the costs that are really owner benefit — owner compensation, interest, depreciation, amortization, one-time and personal expenses — across three years, weight by ownership share, and apply a multiple drawn from a benchmark table of roughly eighty industries. On top of the headline number, every report runs a purchase-justification test: assume a buyer puts 20% down and finances the rest over five years at 6%, then check whether the business's earnings actually cover the debt service, a cushion, and capital expenditures. The report charts profitability and overhead against the industry's range and renders to a branded multi-page PDF ([sample report](/files/val/todays-val-sample-report.pdf)).
+
+<Gallery ariaLabel="A generated Today's VAL valuation report, all five pages.">
+  <Figure
+    src={reportPage1}
+    alt="Report page 1: the Today's VAL header over a headline valuation of $1,275,000, and a plain-English explanation of Seller's Discretionary Earnings and how the SDE multiple scales with the size of a business."
+    caption="The headline number — here $1,275,000 — and a plain-English explanation of the SDE method behind it."
+  />
+
+  <Figure
+    src={reportPage2}
+    alt="Report page 2: two bulleted lists, the business attributes that justify a higher multiple within the industry range and those that justify a lower one."
+    caption="The qualitative attributes that pull a business's multiple toward the high or low end of its industry range."
+  />
+
+  <Figure
+    src={reportPage3}
+    alt="Report page 3: a table of three years of financials and add-backs (gross sales, owner compensation, interest, depreciation, amortization, non-recurring and owner-benefit expenses, equipment, profit/loss, rent), the ownership-weighted Seller's Discretionary Earnings totaling $510,000, and a 2.5x brewery/pub multiple producing the $1,275,000 valuation."
+    caption="The three years of financials and add-backs the SDE is built from: $510,000 of owner-weighted earnings against a 2.5× brewery/pub multiple."
+  />
+
+  <Figure
+    src={reportPage4}
+    alt="Report page 4: the Justification of Purchase Test, breaking the $1,275,000 asking price into a 20% down payment and 80% financed over five years at 6%, then subtracting annual debt service, a 25% cushion, and capital expenditures from SDE to leave the buyer's earnings."
+    caption="The purchase-justification test: does the business's earnings cover the financing, a cushion, and capex, and leave the buyer a living?"
+  />
+
+  <Figure
+    src={reportPage5}
+    alt="Report page 5: the Assumptions the valuation rests on — an asset sale, a debt-free business, a buyer who works in the business, what the seller provides, and lease continuity — with a note that the result is an estimate, not a certified valuation."
+    caption="The assumptions the number rests on, and the disclaimer that it's an estimate, not a certified appraisal."
+  />
+</Gallery>
+
+Acquisition ran through a freemium funnel. Anyone could get a quick indication of value with no account: a public, one-question-at-a-time wizard takes a single year of numbers and emails back a valuation range. The full three-year report with the complete PDF sat behind the paywall, billed through Stripe's hosted subscription and customer portal across several plans — single-use, monthly, annual, a lifetime founders tier, and a multi-use tier for advisors.
+
+To address the most tedious step, entering financials by hand, the app integrated with QuickBooks over OAuth and pulled the numbers straight from the owner's books. Listing on the QuickBooks App Store meant passing Intuit's security review, which the rebuilt, locked-down foundation was built to clear.
+
+## Outcome
+
+I took a broken prototype to a secure, cloud-native product: Stripe billing, QuickBooks financial sync, a QuickBooks App Store listing, and a public launch.
+
+It never found commercial traction, but the build wasn't the limiting factor. The product shipped, worked, and did what it promised. What it lacked was a go-to-market that turned spend into retained users: the marketing budget, which included the Kevin Harrington endorsement above, ran out before the product found its market, and the venture wound down. The engineering held up its end but the rest of the business didn't come together around it.

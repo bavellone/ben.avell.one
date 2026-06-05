@@ -1,0 +1,64 @@
+---
+title: FSLA Membership Portal
+oneline: "The membership system of record for a statewide senior-living trade association, modeled as a property graph in Neo4j and served with isomorphic React/Redux. Shared interfaces between client and server using type-safe generated APIs and form validation based on the DB schema."
+role: Architect & sole engineer
+client: Florida Senior Living Association
+dates: July 2017 – March 2022
+stack:
+  - TypeScript
+  - React
+  - Redux
+  - Node.js
+  - Express
+  - Neo4j
+  - Isomorphic SSR
+  - Joi
+  - Stripe
+  - Mailgun
+  - Kubernetes
+  - GKE
+  - Terraform
+  - Docker
+  - GCP
+companyUrl: https://www.floridaseniorliving.org/
+heroTreatment: image
+heroImage: ../../assets/case-studies/fsla/graph-model.svg
+heroAlt: "The Neo4j domain graph behind the FSLA portal, in two clusters. Membership and dues: an Organization node at the center with a self-referential OWNER edge for parent/subsidiary hierarchy, ASSIGNED to a Region (legislative districts), BILLED_AT a Rate (year by bed count), a CONTACT from a Person, and PAID to a Payment. Events, ticketing and payments: an Event HAS_TICKET, an Attendee is REGISTERED for an Event and ISSUED_TICKET, and an Invoice is FOR_EVENT and FOR_ATTENDEE, charged via a StripePayment."
+order: 6
+draft: false
+---
+
+import ZoomImage from "~/components/ZoomImage.astro";
+import ssrPipeline from "~/assets/case-studies/fsla/ssr-pipeline.svg";
+
+## About Florida Senior Living Association
+
+The Florida Senior Living Association is a statewide trade association for senior living in Florida, representing assisted living, memory care, independent living, continuing-care retirement communities, and skilled nursing organizations. Its members are the operators of those communities and the association bills them dues, runs continuing-education conferences and webinars, and advocates for them in the state legislature. The FSLA membership portal was the system of record for all member management.
+
+## Problem
+
+Most of a trade association's data is relationships - a member is an organization and they can own other organizations. Each one maps to a state senate, state house, and U.S. house district for advocacy. Each is billed on a schedule that depends on its bed count and the current year's rate. People are contacts for one or more organizations, and attendees register for events and purchase tickets and add-ons. Dues for a parent organization roll up the dues of everything beneath it.
+
+This highly nested structure creates many join tables in a traditional relational schema. The questions the association needed to answer compound the complexity: show me this owner and every community under it, every member in this senate district, what this parent owes once its subsidiaries are folded in.
+
+The association also needed a cost-efficient way to host its many events, in addition to charging and tracking member dues.
+
+## Approach
+
+The data model is a Neo4j property graph, pictured above. Nine node types (Organization, Person, Region, Rate, Event, Ticket, Attendee, Invoice, StripePayment) connected by fifteen relationship types. `OWNER` is a self-referential edge between organizations, so the parent/subsidiary hierarchy is the graph itself, and rolling subsidiary dues up to a parent is a traversal instead of a recursive join. `ASSIGNED` ties each organization to its legislative regions, so "every member and their parent/children in this district" (a common query) is simple and efficient.
+
+Everything derives from one typed schema per entity, defined once in a module the server and the browser both import. The server reads those schemas to validate writes and to generate the Cypher CRUD and relationship endpoints for every node type, so there is no hand-written controller sitting behind each one. The browser reads the same definitions to build its REST client and to validate every form with Joi before anything leaves the page. Adding an entity, or a new relationship between any two of them, requires a single localized update: the endpoints, the typed client, and the form validation are generated downstream for free.
+
+The app renders isomorphically. A request hits Express, which builds a Redux store, renders the React tree to HTML with `renderToString`, and serializes the store into the page as `window.__data`. The browser loads the same bundle, rehydrates that exact store with `ReactDOM.hydrate`, and carries on as a single-page app, fetching through the shared REST client as the user navigates. The public registration flow and the staff back office are one application, server-rendered for the first paint and interactive after it.
+
+<ZoomImage image={ssrPipeline} alt="The isomorphic SSR pipeline: a browser GET hits Express, which calls createReduxStore and renderToString to produce an HTML document carrying server-rendered markup plus a serialized window.__data store; the browser hydrates that store with ReactDOM.hydrate into a live React and Redux SPA, which fetches after mount through a Joi-validated /api REST layer that issues Cypher queries to Neo4j over the Bolt driver." id="fsla-ssr-pipeline" />
+
+Money moves through Stripe. Event registration is a public, multi-step flow: pick tickets, add optional add-ons, enter each attendee's details, pay. The charge is reconciled by a Stripe webhook that writes the `Invoice`, `Payment`, and `Attendee` nodes and wires up their relationships only after the payment succeeds, so a dropped session never leaves a half-finished registration behind. A virtual terminal lets staff take card payments for dues and tickets over the phone or against a check. Mailgun sends the confirmations and password resets, rendered as React components into email HTML.
+
+It ran on Kubernetes on GKE. Neo4j was a single stateful pod on a persistent disk, reached over the Bolt protocol on the cluster's internal network, with the web tier scaling separately in front of it. A daily CronJob exported the whole graph to Cloud Storage as a Cypher dump via APOC.
+
+## Outcome
+
+The portal was the association's system of record for membership, dues, and events from 2017 until its retirement in early 2022. The graph held hundreds of member organizations, including hundreds of parent/subsidiary ownership links, each tied to its legislative districts and billed against year-and-bed-count rates. Thousands of dues, contribution, and payment records sat behind it. A six-figure sum in dues and event payments moved through Stripe, and more than five hundred attendees registered across nine events with dozens of ticket types.
+
+The two most common queries which justified the graph architecture, rolling subsidiary dues up to a parent and pulling every organization or sub-organization in a legislative district, were native traversals instead of the join-heavy reports they would have been against tables. Driving the endpoints, the typed client, and the form validation off one shared set of schemas maximized development velocity and quality.

@@ -34,9 +34,10 @@ export const projects: Project[] = [
     dates: "May 2026",
     status: "Live",
     blurb:
-      "This site. Static Astro with no hydrated JavaScript, Tailwind v4 design tokens, and per-page OG cards rendered at build. Cloudflare Pages hosting and DNS, with the zone and Pages project managed end-to-end in Terraform.",
+      "This site. Static Astro with no hydrated JavaScript, Tailwind v4. Cloudflare Pages hosting and DNS, with the zone and Pages project managed end-to-end in Terraform.",
     stack: ["Astro", "TypeScript", "Tailwind CSS", "Cloudflare Pages", "Terraform"],
     files: [{ label: "Source on GitHub", href: "https://github.com/bavellone/ben.avell.one" }],
+    featured: true,
   },
   {
     name: "AI-First SaaS Rewrite",
@@ -48,22 +49,13 @@ export const projects: Project[] = [
     featured: true,
   },
   {
-    name: "FSLA Membership Portal",
-    dates: "April 2017 – June 2021",
-    status: "Sunset",
-    blurb:
-      "React/Redux + isomorphic SSR + Neo4j. Relationship-rich member data in a graph database, rendered server-side and hydrated on the client.",
-    stack: ["React", "Redux", "Node.js", "Neo4j", "SSR"],
-    featured: true,
-  },
-  {
     name: "ScheduleGofer",
     dates: "2012 – 2015",
     status: "Legacy",
     blurb:
-      "First substantive product: scheduling for restaurant operators, built within OrderCounter, Inc.",
+      "Scheduling platform for restaurant operators to manage hourly employee shifts, time-off requests and store-wide communication. Built within OrderCounter, Inc.",
     stack: ["AngularJS", "PHP", "MySQL"],
-    featured: true,
+    files: [{label: "Home page", href: "https://home.schedulegofer.com"}]
   },
   {
     name: "Metal Detector (BFO)",

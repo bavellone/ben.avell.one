@@ -1,0 +1,18 @@
+Copyright (c) 2026 Ben Avellone. All rights reserved.
+
+This repository and everything in it — the source code as well as all
+accompanying content (text, case studies, images, videos, and documents) — are
+the proprietary work of Ben Avellone.
+
+No license, express or implied, is granted to any person to copy, modify,
+publish, redistribute, sublicense, sell, or otherwise reuse any part of this
+work, in whole or in part, without prior written consent from the copyright
+holder. Viewing the public source for personal reference is permitted; all
+other rights are reserved.
+
+Client names, logos, screenshots, reports, and other materials referenced in
+the case studies remain the property of their respective owners and are
+included here with permission for portfolio purposes only. They may not be
+extracted, reused, or redistributed.
+
+THE WORK IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.

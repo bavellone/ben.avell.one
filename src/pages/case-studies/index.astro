@@ -19,6 +19,6 @@ const studies = (await getCollection("caseStudies", ({ data }) => !data.draft)).
     </p>
   </section>
   <section class="container-page mt-[var(--space-section)] grid gap-16 sm:grid-cols-2">
-    {studies.map((entry) => <CaseStudyCard entry={entry} />)}
+    {studies.map((entry, i) => <CaseStudyCard entry={entry} eager={i < 2} />)}
   </section>
 </BaseLayout>

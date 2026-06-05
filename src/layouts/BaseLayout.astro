@@ -11,7 +11,7 @@ interface Props {
 
 const {
   title,
-  description = "Full-stack engineer. End-to-end product ownership across a decade of production systems.",
+  description = "Full-stack engineer. End-to-end product ownership across more than a decade of production systems.",
 } = Astro.props;
 
 const SITE_NAME = "Ben Avellone";
@@ -91,5 +91,23 @@ const personSchema = {
       <slot />
     </main>
     <Footer />
+
+    <script>
+      // Progressive enhancement for the pure-CSS (:target) zoom lightbox.
+      // Opening and especially closing it navigates to a #fragment, and the
+      // browser scrolls that fragment's element into view — which shifts the
+      // page when the trigger image is large (case-study figures, WPMH
+      // diagrams). Restore the scroll position the user had at click time so
+      // open/close never moves the page. No-JS users keep working zoom with
+      // the browser's native scroll behavior.
+      document.addEventListener("click", (e) => {
+        const el = e.target instanceof Element ? e.target : null;
+        if (!el?.closest("a.zoomable, .lightbox__bg")) return;
+        const { scrollX, scrollY } = window;
+        // The fragment scroll happens during the click's default action; undo
+        // it before the next paint so there's no visible jump.
+        requestAnimationFrame(() => window.scrollTo(scrollX, scrollY));
+      });
+    </script>
   </body>
 </html>

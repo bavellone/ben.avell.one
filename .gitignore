@@ -17,4 +17,4 @@ pnpm-debug.log*
 # the public repo.
 docs/
 .claude/
-terraform/README.md
+
