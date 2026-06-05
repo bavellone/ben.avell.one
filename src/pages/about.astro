@@ -19,8 +19,9 @@ import BaseLayout from '~/layouts/BaseLayout.astro'
 				<p class='mt-6 text-[var(--text-lead)] text-[var(--color-ink-soft)]'>
 					I'm a full-stack engineer and the founder of CodeScalar LLC, working remotely from the U.S. Central time zone.
 					I've spent about fifteen years building software end-to-end: almost always as the technical lead, usually on a
-					small team or alone, and always for stakeholders who needed me to understand their business as well as their
-					code. CodeScalar has run since 2019, continuing the client work I started as Coastware in 2016 and as an
+					small team or as the sole technical teammate, and always for stakeholders who needed me to <a
+						href='/case-studies/val'>understand their business as well as their code</a
+					>. CodeScalar has run since 2019, continuing the client work I started as Coastware in 2016 and as an
 					independent developer before that, mostly small and mid-sized businesses. The longest of those engagements are
 					<a href='/case-studies/bsi'>still active today</a>.
 				</p>
@@ -32,10 +33,11 @@ import BaseLayout from '~/layouts/BaseLayout.astro'
 		<div class='measure'>
 			<h2 class='text-[var(--text-h2)] font-semibold tracking-tight'>What I'm looking for</h2>
 			<p class='mt-6 text-[var(--color-ink-soft)]'>
-				I'm looking for a senior or staff IC role with real ownership: end-to-end product work, full-stack, comfortable
-				with ambiguity. Small team, low process, async-friendly, tenured peers who take the craft seriously. I highly
-				value autonomy and being able to make decisions based on a high-level vision and direction. Ideally, I want to
-				work with people I can exchange knowledge with and grow each other professionally.
+				I'm looking for a senior or staff IC role with real ownership: <a href='/case-studies/mediatech'
+					>end-to-end product work</a
+				>, full-stack, comfortable with ambiguity. Small team, low process, async-friendly, tenured peers who take the
+				craft seriously. I highly value autonomy and being able to make decisions based on a high-level vision and
+				direction. Ideally, I want to work with people I can exchange knowledge with and grow each other professionally.
 			</p>
 			<p class='mt-4 text-[var(--color-ink-soft)]'>
 				After fifteen years mostly on my own, part of what I'm looking for is the thing my solo career has been light
@@ -54,20 +56,33 @@ import BaseLayout from '~/layouts/BaseLayout.astro'
 		<div class='measure'>
 			<h2 class='text-[var(--text-h2)] font-semibold tracking-tight'>How I think</h2>
 			<p class='mt-6 text-[var(--color-ink-soft)]'>
-				When handed a problem, my first instinct is to step back and ask what we're actually trying to do, and why. Most
-				of the cost of bad software is paid upstream of the code, in assumptions no one questioned. I'd rather spend an
-				extra hour clarifying the goal than ship something well-built that solves the wrong problem.
+				When handed a problem, my first instinct is to step back and ask what we're actually trying to do, and why. I'd
+				rather spend extra time upfront to clarify the goal than ship something well-built that solves the wrong
+				problem.
+			</p>
+			<p class='mt-4 text-[var(--color-ink-soft)]'>
+				I'm not locked into one way of doing things and strongly believe in using the right tool for the job. Being
+				flexible is more important than being comfortable. I like to try out <a href='/case-studies/fsla'
+					>new tools and technologies</a
+				> to evaluate them and see what they offer over what I already know. I'm a big fan of doing less with more.
+			</p>
+			<p class='mt-4 text-[var(--color-ink-soft)]'>
+				I prefer an iterative development cycle ("Agile") to tease out exactly how the software should look, work and
+				feel. That said, you only get one "first impression" and quality matters - you will often be judged by how close
+				you are to the target in each cycle and for this reason I think it's worth spending the effort to get as close
+				as you can.
+			</p>
+			<p class='mt-4 text-[var(--color-ink-soft)]'>
+				I'm a very detail-oriented person and will sweat the details when it matters. I'm also pragmatic and understand
+				that sometimes the most important factor is speed. I enjoy discussing and <a href='/case-studies/wpmh'
+					>weighing tradeoffs</a
+				> before embarking on implementation. At the end of the day, what's most important is solving the problem at hand,
+				both in the immediate sense (this feature needs to work well) and the long-term horizon (this product needs to make
+				sense).
 			</p>
 			<p class='mt-4 text-[var(--color-ink-soft)]'>
 				I'm picky about the language I use, in code, writing, and in conversation. I'll often revise an important email
 				or document a few times until I'm satisfied with it, keeping in mind not to "let perfect be the enemy of good."
-			</p>
-			<p class='mt-4 text-[var(--color-ink-soft)]'>
-				I'm a very detail-oriented person and will sweat the details when it matters. I enjoy discussing and <a
-					href='/case-studies/wpmh'>weighing tradeoffs</a
-				> before embarking on implementation. At the end of the day, what's most important is solving the problem at hand,
-				both in the immediate sense (this feature needs to work well) and the long-term horizon (this product needs to make
-				sense).
 			</p>
 			<p class='mt-4 text-[var(--color-ink-soft)]'>
 				I enjoy breaking complex ideas or tech down to their constituent components, understanding each piece, and being
@@ -81,36 +96,65 @@ import BaseLayout from '~/layouts/BaseLayout.astro'
 		<div class='measure'>
 			<h2 class='text-[var(--text-h2)] font-semibold tracking-tight'>On AI tooling</h2>
 			<p class='mt-6 text-[var(--color-ink-soft)]'>
-				I held off on AI tooling for software development until recently. My career has trended toward more
-				deterministic, reproducible, and declarative paradigms (Kubernetes, Terraform/IaC, functional/pure programming),
-				and early AI tooling felt like a step backwards. By late 2025 the tradeoffs had shifted decisively, and it was
-				clear where the industry is headed. Since then I've been folding these tools into my workflow deliberately, with
-				care and caution.
+				I use Claude and Claude Code extensively for ideas, boilerplate and code analysis these days. My past career
+				trajectory had trended toward deterministic, reproducible, and declarative paradigms (Kubernetes, Terraform/IaC,
+				functional/pure programming), and early AI tooling had felt like a step backwards. Now, with the latest models
+				and harnesses, the tradeoffs have shifted decisively and it has become clear significant time, effort and
+				quality benefits can be had when used correctly.
 			</p>
 			<p class='mt-4 text-[var(--color-ink-soft)]'>
-				I had previously dabbled in personal usage of AI for development using tools like Aider but found them lacking.
-				I started using Claude Code when I saw how good the models and harnesses have gotten. In early 2026 I began
-				using it professionally for a client project to rewrite an internal legacy PHP app into a modern TS/Node
-				codebase with support for turning it into a paid SaaS app, the <a href='/projects'>AI-First SaaS Rewrite</a> project.
+				I've been paying close attention to AI developments and early on had dabbled in personal usage of AI for
+				development using tools like Aider but found them lacking. In 2025, I started using Claude Code professionally
+				here and there - bug fixes, root cause analysis, boilerplate, etc.
+			</p>
+			<p class='mt-4 text-[var(--color-ink-soft)]'>
+				In 2026, I came across a perfect opportunity to experiment with and stress-test an AI-First approach to
+				development. I began helping a client with an <a href='/projects'>AI-First SaaS Rewrite</a>, with me in the
+				driver seat but doing very little actual coding and instead focusing on architecture and product quality. The
+				goal was to rewrite an internal legacy PHP app into a modern TS/Node codebase and add on OAuth and Stripe
+				integrations, turning it into a paid SaaS app. I've found AI to be incredibly helpful and a great fit for this
+				use-case - simplifying and porting a legacy codebase to another language and architecture. It's been a great
+				real-world learning experience.
 			</p>
 
+			<h3 class='mt-8 text-[var(--text-h3)] font-medium tracking-tight'>Learnings</h3>
 			<p class='mt-4 text-[var(--color-ink-soft)]'>
 				I've found a few things are extremely important for maintaining cohesion and continuity while using AI-first or
 				AI-assisted development:
 			</p>
-			<h3 class='mt-8 text-[var(--text-h3)] font-medium tracking-tight'>
+			<h4 class='mt-8 text-[var(--text-h4)] font-medium tracking-tight'>
 				Own the architecture, the abstractions, and the decision making
-			</h3>
+			</h4>
 			<p class='mt-3 text-[var(--color-ink-soft)]'>
-				Rubber-ducking is great but don't let AI make any important decisions by itself - anything you underspecify is
-				liable to be a headache down the road.
+				Rubber-ducking is great but don't let AI make any critical decisions by itself without review - anything you
+				underspecify is liable to be a headache down the road.
 			</p>
-			<h3 class='mt-8 text-[var(--text-h3)] font-medium tracking-tight'>
+			<h4 class='mt-8 text-[var(--text-h4)] font-medium tracking-tight'>
 				Workflow is more important than the model or harness
-			</h3>
+			</h4>
 			<p class='mt-3 text-[var(--color-ink-soft)]'>
 				Research, red/green/blue TDD and bespoke tooling for the agent specific to the codebase (e.g. CLIs, custom
 				skills/commands) are incredibly valuable and worth investing in early.
+			</p>
+		</div>
+	</section>
+
+	<section class='container-page mt-[var(--space-section)]'>
+		<div class='measure'>
+			<h2 class='text-[var(--text-h2)] font-semibold tracking-tight'>Hobbies & Fun</h2>
+			<p class='mt-6 text-[var(--color-ink-soft)]'>
+				I'm an amateur musician - I've been playing guitar since high school and enjoy getting together with other
+				musicians to jam. I love live music and have been to many concerts and festivals over the years (some of my
+				faves - Van Halen, AC/DC, Muse, A7X, Alice in Chains).
+			</p>
+			<p class='mt-6 text-[var(--color-ink-soft)]'>
+				On the programming end of things, I'll often whip up a new project to see how far I can take an idea. Games, web
+				scrapers, personal organization tools, visualizers, etc. My local project directory is littered with experiments
+				and throwaway toys, which I use to explore ideas or new tech. I've had a lot of fun tinkering with LLMs and
+				Diffusion models over the last few years - finetuning, ablation, and local models particularly interest me.
+			</p>
+			<p class='mt-6 text-[var(--color-ink-soft)]'>
+				On my back-burner to get into next - metallurgy and woodworking. Need some room and tools first though!
 			</p>
 		</div>
 	</section>
